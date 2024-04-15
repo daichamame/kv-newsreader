@@ -1,0 +1,160 @@
+#:kivy 2.1.0
+TileWidget:
+<TileWidget>:
+    BoxLayout:
+        orientation: 'vertical'
+        size: root.size
+        GridLayout:
+            cols:1
+            rows:2
+            #-----------------------------------------------------------------------
+            # メイン
+            #-----------------------------------------------------------------------
+            GridLayout:
+                cols:2
+                rows:1
+                size_hint_y:0.9
+                #-----------------------------------------------------------------------
+                # 左側ボタン
+                #-----------------------------------------------------------------------
+                GridLayout:
+                    cols:1
+                    rows:8
+                    size_hint_x:0.3
+                    MenuButton:
+                        id:btn_0
+                        on_release:root.menu_sw(0)
+                    MenuButton:
+                        id:btn_1
+                        on_release:root.menu_sw(1)
+                    MenuButton:
+                        id:btn_2
+                        on_release:root.menu_sw(2)
+                    MenuButton:
+                        id:btn_3
+                        on_release:root.menu_sw(3)
+                    MenuButton:
+                        id:btn_4
+                        on_release:root.menu_sw(4)
+                    MenuButton:
+                        id:btn_5
+                        on_release:root.menu_sw(5)
+                    MenuButton:
+                        id:btn_6
+                        on_release:root.menu_sw(6)
+                    MenuButton:
+                        id:btn_7
+                        on_release:root.menu_sw(7)
+                #-----------------------------------------------------------------------
+                # ニュース表示エリア
+                #-----------------------------------------------------------------------
+                GridLayout:
+                    cols:1
+                    rows:5
+                    size_hint_x:0.7
+                    GridLayout:
+                        size_hint_y:0.1
+                        cols:3
+                        rows:1
+                        DataLabel:
+                            size_hint_x:0.7
+                            id:lbl_title
+                        DataLabel:
+                            size_hint_x:0.1
+                            text:"自動" if autoplay.active else '手動'
+                        Switch:
+                            size_hint_x:0.2
+                            id:autoplay
+                            on_active: root.switch_modes(self.active)
+                    NewsContentLabel:
+                        size_hint_y:0.2
+                        id:newstitle
+                        background_color: .1,.2,.2, 1
+                        font_size:self.height/4
+                        height: self.texture_size[1]
+                        text_size: self.width, None
+                    NewsContentLabel:
+                        size_hint_y:0.6
+                        id:newscontent
+                        font_size:self.height/16
+                        height: self.texture_size[1]
+                        text_size: self.width, None
+                    CtrlButton:
+                        size_hint_y:0.1
+                        id:newslink
+                        text:"関連リンク"
+                        text_size: self.width, None
+                        on_press: root.open_link()
+            #-----------------------------------------------------------------------
+            # 下段（日時、ニュース操作ボタン、終了ボタン）
+            #-----------------------------------------------------------------------
+            GridLayout:
+                cols:5
+                rows:1
+                size_hint_y:0.1
+                DataLabel:
+                    size_hint_x:0.4
+                    id:lbl_date
+                MenuButton:
+                    size_hint_x:0.2
+                    text: "<"
+                    on_release: root.menu_sw('prev_news')
+                MenuButton:
+                    size_hint_x:0.2
+                    text: ">"
+                    on_release: root.menu_sw('next_news')
+                CtrlButton:
+                    size_hint_x:0.2
+                    text: "閉じる"
+                    on_press: root.exit_dialog()
+#-----------------------------------------------------------------------
+# Label用バックグラウンドカラー定義
+<BackgroundColor@Widget>
+    background_color: 1, 1, 1, 1
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+#-----------------------------------------------------------------------
+# ボタン、ラベルレイアウト
+<CtrlButton@Button>:
+    font_size:self.height/3
+    background_color: .34, .45, .29, 1
+<MenuButton@Button>:
+    font_size: self.height/3
+    background_color: .75,.75,.34, 1
+<DataLabel@Label+BackgroundColor>:
+    background_color: .1,.3,.3, 1
+    font_size:self.height/3
+    text_size: self.width, None
+#-----------------------------------------------------------------------
+# ニュースエリア
+<NewsContentLabel@Label+BackgroundColor>:
+    background_color: .1,.2,.1,1
+    valign:'top'
+    text_size:self.size
+    text:""
+
+#-----------------------------------------------------------------------
+# 終了確認ダイアログ
+<PopupExitDialog>:
+    title: '確認'
+    size_hint: 0.6, 0.8 
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            size_hint_y: 0.4
+            font_size:self.width/16
+            text: '選択してください'
+        Button:
+            size_hint_y: 0.3
+            font_size:self.width/16
+            text: 'プログラム終了'
+            on_release: root.exec_exit()
+        Button:
+            size_hint_y: 0.3
+            font_size:self.width/16
+            text: 'キャンセル'
+            on_press: root.dismiss()
