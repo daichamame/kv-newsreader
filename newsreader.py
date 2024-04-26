@@ -108,7 +108,7 @@ class TileWidget(Widget):
         except:
             print("failed to cancel dispnews_event")
         if(status):
-            # ニュースの取得スケジュールを再定
+            # ニュースの取得スケジュールを設定
             try:
                 self.getnews_event=Clock.schedule_interval(self.get_news_callback,self.cat_interval)
             except:
